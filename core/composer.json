@@ -1,0 +1,17 @@
+{
+    "name": "ignite/reseller-core",
+    "description": "Platform-agnostic reselling core for Ignite reseller addons (WHMCS, Paymenter). Wraps the official ignite API client.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.2",
+        "ignite/api-client": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "IgniteReseller\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

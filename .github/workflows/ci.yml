@@ -1,0 +1,73 @@
+# WHMCS + Paymenter reselling addons CI (mirrored from ignite/reslling-addons).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: PHP syntax & Composer metadata
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          coverage: none
+          tools: composer:v2
+
+      - name: PHP syntax
+        run: |
+          find . -name '*.php' -not -path './vendor/*' -print0 \
+            | xargs -0 -r -n1 php -l
+
+      - name: Composer validate
+        run: |
+          for file in $(find . -name composer.json -not -path './vendor/*'); do
+            echo "== ${file}"
+            composer validate --no-check-publish --no-check-lock "${file}"
+          done
+
+  release:
+    name: GitHub release
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Package
+        run: |
+          mkdir -p release-upload
+          zip -qr "release-upload/reselling-addons-${GITHUB_SHA:0:7}.zip" \
+            core paymenter whmcs README.md
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v0.0.0-${{ github.run_number }}
+          name: "reselling-addons build ${{ github.run_number }}"
+          generate_release_notes: true
+          make_latest: true
+          body: |
+            Automatischer Release der Ignite-Reselling-Addons.
+
+            | | |
+            |---|---|
+            | Build | `${{ github.run_number }}` |
+            | Commit | `${{ github.sha }}` |
+          files: release-upload/*

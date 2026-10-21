@@ -1,0 +1,25 @@
+{
+    "name": "ignite/whmcs-addon-ignite-reseller",
+    "description": "WHMCS addon module for Ignite reselling",
+    "type": "whmcs-module",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.2",
+        "ignite/api-client": "*",
+        "ignite/reseller-core": "*"
+    },
+    "repositories": [
+        { "type": "path", "url": "../../../vendor-src/api-client" },
+        { "type": "path", "url": "../../../core" }
+    ],
+    "autoload": {
+        "psr-4": {
+            "IgniteReseller\\Whmcs\\": "lib/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "optimize-autoloader": true
+    }
+}
