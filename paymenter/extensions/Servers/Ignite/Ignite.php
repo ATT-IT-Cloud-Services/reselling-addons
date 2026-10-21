@@ -262,14 +262,14 @@ class Ignite extends Server
 
     public function suspendServer(Service $service, $settings, $properties)
     {
-        $this->reseller()->services->suspend($this->requireRemoteId($service))this->requireRemoteId($service));
+        $this->reseller()->services->suspend($this->requireRemoteId($service));
 
         return true;
     }
 
     public function unsuspendServer(Service $service, $settings, $properties)
     {
-        $this->reseller()->services->resume($this->requireRemoteId($service))this->requireRemoteId($service));
+        $this->reseller()->services->resume($this->requireRemoteId($service));
 
         return true;
     }
@@ -296,7 +296,7 @@ class Ignite extends Server
     {
         // Product/resource upgrades must go through the subscription interface;
         // the API key cannot use checkout. Preview is validated here.
-        $this->reseller()->services->upgradeOptions($this->requireRemoteId($service))this->requireRemoteId($service));
+        $this->reseller()->services->upgradeOptions($this->requireRemoteId($service));
 
         return true;
     }
@@ -365,7 +365,7 @@ class Ignite extends Server
 
         if (is_array($view)) {
             $name = (string) ($view['name'] ?? 'overview');
-        } elseif (is_object($view)))) {
+        } elseif (is_object($view)) {
             $name = (string) ($view->name ?? 'overview');
         } else {
             $name = (string) ($view ?? 'overview');
